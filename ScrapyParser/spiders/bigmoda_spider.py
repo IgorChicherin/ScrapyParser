@@ -2,7 +2,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 
-from ScrapyParser.items import BigmodaItemloader, BigmodaItem
+from ScrapyParser.items import BigmodaItemLoader, BigmodaItem
 
 
 class BigmodaSpider(CrawlSpider):
@@ -17,14 +17,17 @@ class BigmodaSpider(CrawlSpider):
             allow=r'http://big-moda.com/shop/platya-bolshih-razmerov/([A-Za-z0-9-]+)'
         ),
             callback='parse_item'
-        )
+        ),
+        Rule(LinkExtractor(
+            restrict_xpaths=['//*[@id="main"]/nav[2]/ul/li/a[@class="next page-numbers"]']), follow=True),
     ]
 
     def parse_item(self, response):
         selector = Selector(response)
-        loader = BigmodaItemloader(BigmodaItem(), selector)
+        loader = BigmodaItemLoader(BigmodaItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//*/div[3]/div[3]/span[1]/span/text()')
         loader.add_xpath('price', '//*/div[3]/p[1]/span/text()')
         loader.add_xpath('sizes', '//*[@id="ivpa-content"]/div[2]/span/text()')
+        loader.add_value('site', 'bigmoda')
         return loader.load_item()
