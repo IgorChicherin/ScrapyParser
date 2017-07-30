@@ -11,7 +11,7 @@ import json
 class JsonWriterPipeline(object):
 
     def open_spider(self, spider):
-        self.file = open('items.jl', 'w')
+        self.file = open('result.json', 'w')
 
     def close_spider(self, spider):
         self.file.close()

@@ -7,7 +7,7 @@
 
 import scrapy
 from scrapy.loader import ItemLoader
-from scrapy.loader.processors import TakeFirst, MapCompose
+from scrapy.loader.processors import TakeFirst, MapCompose, Join, Compose
 
 class BigmodaItem(scrapy.Item):
     url = scrapy.Field()
@@ -19,6 +19,6 @@ class BigmodaItem(scrapy.Item):
 class BigmodaItemloader(ItemLoader):
     url_out = TakeFirst()
     name_out = TakeFirst()
-    price_out = TakeFirst()
-    sizes_out = MapCompose()
-
+    price_in = TakeFirst()
+    price_out = Compose(lambda x: x[0].strip().replace(',', '').split('.'), price_in)
+    sizes_out = MapCompose(lambda x: x.strip())
