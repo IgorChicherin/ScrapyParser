@@ -6,7 +6,7 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 import json
-
+from ScrapyParser.spiders import bigmoda_spider
 
 class JsonWriterPipeline(object):
 
