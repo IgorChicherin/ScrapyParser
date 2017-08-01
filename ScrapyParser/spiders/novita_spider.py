@@ -56,7 +56,8 @@ def _prettify_color(value):
 class NovitaSpider(CrawlSpider):
     name = 'novita'
 
-    start_urls = ['http://novita-nsk.ru/shop/zhenskie-platja-optom/']
+    start_urls = ['http://novita-nsk.ru/shop/zhenskie-platja-optom/',
+                  'http://novita-nsk.ru/shop/bluzy/']
     allowed_domains = ['novita-nsk.ru']
 
     rules = [
