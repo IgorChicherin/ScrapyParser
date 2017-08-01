@@ -12,7 +12,6 @@ from scrapy.loader.processors import TakeFirst, MapCompose, Compose, Identity
 import re
 
 
-
 class BigmodaItem(scrapy.Item):
     url = scrapy.Field()
     name = scrapy.Field()
@@ -36,8 +35,6 @@ class NovitaItem(scrapy.Item):
     price = scrapy.Field()
     sizes = scrapy.Field()
     site = scrapy.Field()
-
-
 
 
 class NovitaItemLoader(ItemLoader):

@@ -5,13 +5,18 @@
 # Don't forget to add your pipeline to the ITEM_PIPELINES setting
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
+import os
 import json
-from ScrapyParser.spiders import bigmoda_spider
+
 
 class JsonWriterPipeline(object):
+    # files = ['result.json']
+    # for file in files:
+    #     if os.path.exists(file):
+    #         os.remove(file)
 
     def open_spider(self, spider):
-        self.file = open('result.json', 'w')
+        self.file = open('result.json', 'a')
 
     def close_spider(self, spider):
         self.file.close()
