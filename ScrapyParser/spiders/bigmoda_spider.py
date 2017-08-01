@@ -8,13 +8,14 @@ from ScrapyParser.items import BigmodaItemLoader, BigmodaItem
 class BigmodaSpider(CrawlSpider):
     name = 'bigmoda'
 
-    start_urls = ['http://big-moda.com/product-category/platya-bolshih-razmerov/']
+    start_urls = ['http://big-moda.com/product-category/platya-bolshih-razmerov/',
+                  'http://big-moda.com/product-category/bluzki-bolshih-razmerov/']
     allowed_domains = ['big-moda.com']
 
     rules = [
         Rule(LinkExtractor(
             restrict_xpaths=['//*[@id="main"]/ul'],
-            allow=r'http://big-moda.com/shop/platya-bolshih-razmerov/([A-Za-z0-9-]+)'
+            allow=r'http://big-moda.com/shop/([A-Za-z0-9-]+)/([A-Za-z0-9-]+)'
         ),
             callback='parse_item'
         ),
