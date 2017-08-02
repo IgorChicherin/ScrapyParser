@@ -16,7 +16,7 @@ class JsonWriterPipeline(object):
     #         os.remove(file)
 
     def open_spider(self, spider):
-        self.file = open('result.json', 'a')
+        self.file = open('result.json', 'w')
 
     def close_spider(self, spider):
         self.file.close()

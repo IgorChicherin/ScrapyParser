@@ -38,9 +38,25 @@ class NovitaItem(scrapy.Item):
 
 
 class NovitaItemLoader(ItemLoader):
-    site_out = TakeFirst()
     url_out = TakeFirst()
     name_in = TakeFirst()
     name_out = Compose(lambda x: re.search(r'(?<=№)(\d+/\d+)|(?<=№)(\d+)', str(x)).group(0), Identity())
     price_out = Compose(lambda x: x[0].strip().replace(',', '').split('.'), TakeFirst())
     sizes_out = Identity()
+    site_out = TakeFirst()
+
+
+class PrimalineaItem(scrapy.Item):
+    url = scrapy.Field()
+    # name = scrapy.Field()
+    price = scrapy.Field()
+    # sizes = scrapy.Field()
+    # site = scrapy.Field()
+
+
+class PrimalineaItemLoader(ItemLoader):
+    url_out = TakeFirst()
+    # name_out = TakeFirst()
+    price_out = TakeFirst()
+    # sizes_out = Compose()
+    # site_out = TakeFirst()
