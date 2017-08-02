@@ -48,15 +48,15 @@ class NovitaItemLoader(ItemLoader):
 
 class PrimalineaItem(scrapy.Item):
     url = scrapy.Field()
-    # name = scrapy.Field()
+    name = scrapy.Field()
     price = scrapy.Field()
-    # sizes = scrapy.Field()
-    # site = scrapy.Field()
+    sizes = scrapy.Field()
+    site = scrapy.Field()
 
 
 class PrimalineaItemLoader(ItemLoader):
     url_out = TakeFirst()
-    # name_out = TakeFirst()
-    price_out = TakeFirst()
-    # sizes_out = Compose()
-    # site_out = TakeFirst()
+    name_out = TakeFirst()
+    price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
+    sizes_out = Identity()
+    site_out = TakeFirst()
