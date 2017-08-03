@@ -1,5 +1,4 @@
 from scrapy.spiders import CrawlSpider, Rule
-from scrapy.contrib.spiders.init import InitSpider
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 from scrapy.http import FormRequest, Request
@@ -31,12 +30,12 @@ class PrimalineaSpider(CrawlSpider):
                                          callback=self.check_login_response)
 
     def check_login_response(self, response):
-        # if 'Добро пожаловать, Евгений !' in response.body:
-        #     self.log('Login failed')
-        # else:
-        #     self.log('Successfully logged in. Let\'s start crawling!')
-        for url in self.start_urls:
-            yield Request(url)
+        if bytes('Выход', 'utf-8') not in response.body:
+            self.log('Login failed')
+        else:
+            self.log('Successfully logged in. Let\'s start crawling!')
+            for url in self.start_urls:
+                yield Request(url)
 
     def parse_item(self, response):
         selector = Selector(response)
