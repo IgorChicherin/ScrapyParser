@@ -73,7 +73,7 @@ class AvigalItem(scrapy.Item):
 class AvigalItemLoader(ItemLoader):
     url_out = TakeFirst()
     name_out = TakeFirst()
-    price_out = TakeFirst()
+    price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Compose()
     site_out = TakeFirst()
 

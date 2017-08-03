@@ -48,7 +48,7 @@ class AvigalSpider(CrawlSpider):
         selector = Selector(response)
         loader = AvigalItemLoader(AvigalItem(), selector)
         loader.add_value('url', response.url)
-        loader.add_xpath('name', '//*[@id="container"]/div[1]/ul/li[3]/span/text()')
+        loader.add_xpath('name', '//span[@itemprop="model"]/text()')
         loader.add_xpath('price', '//*[@id="update_price"]/text()')
         loader.add_value('sizes', _get_sizes_list(response.body))
         loader.add_value('site', 'avigal')
