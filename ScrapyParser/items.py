@@ -14,10 +14,10 @@ import re
 
 class SpidersItem(scrapy.Item):
     url = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
-    sizes = scrapy.Field()
-    site = scrapy.Field()
+    # name = scrapy.Field()
+    # price = scrapy.Field()
+    # sizes = scrapy.Field()
+    # site = scrapy.Field()
 
 
 class BigmodaItemLoader(ItemLoader):
@@ -55,4 +55,9 @@ class AvigalItemLoader(ItemLoader):
 
 
 class WisellItemLoader(ItemLoader):
-    pass
+    site_out = TakeFirst()
+    # url_out = TakeFirst()
+    # name_out = TakeFirst()
+    # price_in = TakeFirst()
+    # sizes_out = Identity()
+    # site_out = TakeFirst()
