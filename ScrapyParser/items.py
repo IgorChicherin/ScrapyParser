@@ -60,3 +60,20 @@ class PrimalineaItemLoader(ItemLoader):
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Identity()
     site_out = TakeFirst()
+
+
+class AvigalItem(scrapy.Item):
+    url = scrapy.Field()
+    name = scrapy.Field()
+    price = scrapy.Field()
+    sizes = scrapy.Field()
+    site = scrapy.Field()
+
+
+class AvigalItemLoader(ItemLoader):
+    url_out = TakeFirst()
+    name_out = TakeFirst()
+    price_out = TakeFirst()
+    sizes_out = Compose()
+    site_out = TakeFirst()
+
