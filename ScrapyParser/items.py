@@ -77,3 +77,14 @@ class AvigalItemLoader(ItemLoader):
     sizes_out = Compose()
     site_out = TakeFirst()
 
+
+class WisellItem():
+    url = scrapy.Field()
+    name = scrapy.Field()
+    price = scrapy.Field()
+    sizes = scrapy.Field()
+    site = scrapy.Field()
+
+
+class WisellItemLoader(ItemLoader):
+    pass

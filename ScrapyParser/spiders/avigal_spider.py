@@ -19,7 +19,7 @@ class AvigalSpider(CrawlSpider):
     name = 'avigal'
 
     login_page = 'http://avigal.ru/login/'
-    start_urls = ['http://avigal.ru/dress/']
+    start_urls = ['http://avigal.ru/dress/', 'http://avigal.ru/blouse-tunic/']
     allowed_domais = ['avigal.ru']
 
     rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="res-products"]/div[1]'],
