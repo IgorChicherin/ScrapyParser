@@ -12,7 +12,7 @@ from scrapy.loader.processors import TakeFirst, MapCompose, Compose, Identity
 import re
 
 
-class BigmodaItem(scrapy.Item):
+class SpidersItem(scrapy.Item):
     url = scrapy.Field()
     name = scrapy.Field()
     price = scrapy.Field()
@@ -29,14 +29,6 @@ class BigmodaItemLoader(ItemLoader):
     sizes_out = MapCompose(lambda x: x.strip())
 
 
-class NovitaItem(scrapy.Item):
-    url = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
-    sizes = scrapy.Field()
-    site = scrapy.Field()
-
-
 class NovitaItemLoader(ItemLoader):
     url_out = TakeFirst()
     name_in = TakeFirst()
@@ -44,14 +36,6 @@ class NovitaItemLoader(ItemLoader):
     price_out = Compose(lambda x: x[0].strip().replace(',', '').split('.'), TakeFirst())
     sizes_out = Identity()
     site_out = TakeFirst()
-
-
-class PrimalineaItem(scrapy.Item):
-    url = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
-    sizes = scrapy.Field()
-    site = scrapy.Field()
 
 
 class PrimalineaItemLoader(ItemLoader):
@@ -62,28 +46,12 @@ class PrimalineaItemLoader(ItemLoader):
     site_out = TakeFirst()
 
 
-class AvigalItem(scrapy.Item):
-    url = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
-    sizes = scrapy.Field()
-    site = scrapy.Field()
-
-
 class AvigalItemLoader(ItemLoader):
     url_out = TakeFirst()
     name_out = TakeFirst()
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Compose()
     site_out = TakeFirst()
-
-
-class WisellItem():
-    url = scrapy.Field()
-    name = scrapy.Field()
-    price = scrapy.Field()
-    sizes = scrapy.Field()
-    site = scrapy.Field()
 
 
 class WisellItemLoader(ItemLoader):

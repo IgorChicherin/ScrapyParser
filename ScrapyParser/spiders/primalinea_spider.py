@@ -3,7 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 from scrapy.http import FormRequest, Request
 
-from ScrapyParser.items import PrimalineaItemLoader, PrimalineaItem
+from ScrapyParser.items import PrimalineaItemLoader, SpidersItem
 
 
 def _prettify_sizes(sizes):
@@ -39,7 +39,7 @@ class PrimalineaSpider(CrawlSpider):
 
     def parse_item(self, response):
         selector = Selector(response)
-        loader = PrimalineaItemLoader(PrimalineaItem(), selector)
+        loader = PrimalineaItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//h1/text()')
         loader.add_xpath('price', '//*[@id="catalog-item-description"]/p[1]/text()')

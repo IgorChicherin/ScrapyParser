@@ -2,7 +2,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 
-from ScrapyParser.items import BigmodaItemLoader, BigmodaItem
+from ScrapyParser.items import BigmodaItemLoader, SpidersItem
 
 
 class BigmodaSpider(CrawlSpider):
@@ -25,7 +25,7 @@ class BigmodaSpider(CrawlSpider):
 
     def parse_item(self, response):
         selector = Selector(response)
-        loader = BigmodaItemLoader(BigmodaItem(), selector)
+        loader = BigmodaItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//*/div[3]/div[3]/span[1]/span/text()')
         loader.add_xpath('price', '//*/div[3]/p[1]/span/text()')

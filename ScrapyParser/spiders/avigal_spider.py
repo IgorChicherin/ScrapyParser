@@ -3,7 +3,7 @@ from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 from scrapy.http import Request, FormRequest
 
-from ScrapyParser.items import AvigalItemLoader, AvigalItem
+from ScrapyParser.items import AvigalItemLoader, SpidersItem
 
 from bs4 import BeautifulSoup
 
@@ -46,7 +46,7 @@ class AvigalSpider(CrawlSpider):
 
     def parse_item(self, response):
         selector = Selector(response)
-        loader = AvigalItemLoader(AvigalItem(), selector)
+        loader = AvigalItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//span[@itemprop="model"]/text()')
         loader.add_xpath('price', '//*[@id="update_price"]/text()')

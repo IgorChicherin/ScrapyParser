@@ -2,7 +2,7 @@ from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 
-from ScrapyParser.items import NovitaItem, NovitaItemLoader
+from ScrapyParser.items import NovitaItemLoader, SpidersItem
 
 from bs4 import BeautifulSoup
 
@@ -71,7 +71,7 @@ class NovitaSpider(CrawlSpider):
 
     def parse_item(self, response):
         selector = Selector(response)
-        loader = NovitaItemLoader(NovitaItem(), selector)
+        loader = NovitaItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//h1/text()')
         loader.add_xpath('price', '//div[@class="price-value"]/div[@class="value"]/text()')
