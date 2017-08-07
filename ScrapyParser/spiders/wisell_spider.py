@@ -1,7 +1,10 @@
+from _cffi_backend import callback
+
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
-from scrapy.http import Request
+from scrapy.http import Request, Response
+import requests
 
 from ScrapyParser.items import WisellItemLoader, SpidersItem
 
@@ -20,24 +23,6 @@ class WisellSpider(CrawlSpider):
              #      callback='parse_item'),
              Rule(LinkExtractor(restrict_xpaths=['//*[@id="main-catalog"]/footer[1]/div/ul/li[6]']), follow=True)]
 
-    def check_small_sizes(self, response):
-        selector = Selector(response)
-        # loader = WisellItemLoader(SpidersItem(), selector)
-        small_link = selector.xpath('//*[@id="size-interval-tabs"]/li[1]/a/@href').extract()[0]
-        # loader.add_value('url', response.url)
-        # loader.add_value('name', small_link)
-        # self.log(small_link)
-        # return loader.load_item()
-        urls = list()
-        urls.append(response.url)
-        if small_link != '#size_rang-2' or small_link != '#size_rang-cont-1':
-            urls.append('http://wisell.ru%s' %
-                        (selector.xpath('//*[@id="size-interval-tabs"]/li[1]/@data-url').extract()[0]))
-        # self.log(urls)
-        for url in urls:
-            self.log('yep')
-            yield Request(url=url, callback=self.parse_item, dont_filter=True)
-
     def parse_item(self, response):
         selector = Selector(response)
         loader = WisellItemLoader(SpidersItem(), selector)
@@ -48,4 +33,11 @@ class WisellSpider(CrawlSpider):
         sizes_list.remove(sizes_list[0])
         loader.add_value('sizes', sizes_list)
         loader.add_value('site', 'wisell')
+        small_size_link = 'http://wisell.ru%s' % (selector.xpath('//*[@id="size-interval-tabs"]'
+                                                                 '/li[1]/@data-url').extract()[0])
+
+        response = Response(url=small_size_link)
+        self.log(response.body)
+        # loader.add_value('url2', response.url)
+        # loader.add_xpath('name2', '//h1/text()')
         return loader.load_item()

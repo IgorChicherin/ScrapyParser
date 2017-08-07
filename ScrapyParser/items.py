@@ -14,7 +14,9 @@ import re
 
 class SpidersItem(scrapy.Item):
     url = scrapy.Field()
+    url2 = scrapy.Field()
     name = scrapy.Field()
+    name2 = scrapy.Field()
     price = scrapy.Field()
     sizes = scrapy.Field()
     site = scrapy.Field()
@@ -56,7 +58,9 @@ class AvigalItemLoader(ItemLoader):
 
 class WisellItemLoader(ItemLoader):
     url_out = TakeFirst()
+    url2_out = TakeFirst()
     name_out = TakeFirst()
+    name2_out = TakeFirst()
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = MapCompose()
     site_out = TakeFirst()
