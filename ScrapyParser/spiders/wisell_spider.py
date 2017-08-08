@@ -43,7 +43,6 @@ class WisellSpider(CrawlSpider):
         elif len(small_url) == 1 and is_big:
             Item['url'] = response.url
             Item['name'] = selector.xpath('//h1/text()').extract()[0]
-            print(Item['name'])
             Item['price'] = selector.xpath('//*[@id="currency_tab-1"]/div/div[2]/span/span/text()').extract()
             Item['price'] = re.search(r'(\d+)', Item['price'][0].strip().replace(' ', '')).group(0)
             sizes_list = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
