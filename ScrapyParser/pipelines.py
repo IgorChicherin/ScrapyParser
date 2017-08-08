@@ -22,6 +22,6 @@ class JsonWriterPipeline(object):
         self.file.close()
 
     def process_item(self, item, spider):
-        line = json.dumps(dict(item), indent=4, ensure_ascii=True) + "\n"
+        line = json.dumps(dict(item)) + "\n"
         self.file.write(line)
         return item
