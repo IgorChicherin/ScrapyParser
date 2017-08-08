@@ -54,13 +54,3 @@ class AvigalItemLoader(ItemLoader):
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Compose()
     site_out = TakeFirst()
-
-
-# class WisellItemLoader(ItemLoader):
-#     url_out = TakeFirst()
-#     url2_out = TakeFirst()
-#     name_out = TakeFirst()
-#     name2_out = TakeFirst()
-#     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
-#     sizes_out = MapCompose()
-#     site_out = TakeFirst()
