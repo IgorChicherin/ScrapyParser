@@ -1,10 +1,9 @@
-from _cffi_backend import callback
+import re
 
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
 from scrapy.http import Request, Response
-
 
 from ScrapyParser.items import WisellItemLoader, SpidersItem
 
@@ -18,46 +17,41 @@ class WisellSpider(CrawlSpider):
     rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="catalog-lements-id"]'],
                                 allow='https://wisell.ru/catalog/\w+/([A-Za-z0-9-]+)'),
                   callback='parse_item'),
-             # Rule(LinkExtractor(restrict_xpaths=['//*[@id="size-interval-tabs"]/li[1]/a'],
-             #                    allow='https://wisell.ru/catalog/platya/([A-Za-z0-9-]+)'),
-             #      callback='parse_item'),
              Rule(LinkExtractor(restrict_xpaths=['//*[@id="main-catalog"]/footer[1]/div/ul/li[6]']), follow=True)]
-
-    # def start_requests(self):
-    #     for url in self.start_urls:
-    #         yield Request(url, callback=self.parse_item)
 
     def parse_item(self, response):
         Item = SpidersItem()
         selector = Selector(response)
-        loader = WisellItemLoader(SpidersItem(), selector)
-        Item['name'] = selector.xpath('//h1/text()').extract()[0]
-        # loader.add_value('url', response.url)
-        # loader.add_xpath('name', '//h1/text()')
-        # loader.add_xpath('price', '//*[@id="currency_tab-1"]/div/div[2]/span/span/text()')
-        # sizes_list = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
-        # sizes_list.remove(sizes_list[0])
-        # loader.add_value('sizes', sizes_list)
-        # loader.add_value('site', 'wisell')
         small_url = selector.xpath('//*[@id="size-interval-tabs"]/li/@data-url').extract()
-        # self.log(small_url)
-        if small_url[0]:
+        is_big = True if selector.xpath('//*[@id="size-interval-tabs"]'
+                                        '/li/a/@href').extract()[0] == '#size_rang-2' else False
+        Item['url'] = response.url
+        Item['name'] = selector.xpath('//h1/text()').extract()[0]
+        Item['price'] = selector.xpath('//*[@id="currency_tab-1"]/div/div[2]/span/span/text()').extract()
+        Item['price'] = re.search(r'(\d+)', Item['price'][0].strip().replace(' ', '')).group(0)
+        sizes_list = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
+        sizes_list.remove(sizes_list[0])
+        Item['sizes'] = sizes_list
+        Item['site'] = 'wisell'
+        if small_url[0] and len(small_url) > 1:
             small_size_link = 'http://wisell.ru%s' % (small_url[0])
             request = Request(small_size_link, callback=self.parse_small_size)
             request.meta['item'] = Item
             yield request
-        elif len(small_url) == 1:
+        elif len(small_url) == 1 and is_big:
             yield Item
-        # response = Response(url=small_size_link)
-        # self.log(response.body)
-        # loader.add_value('url2', response.url)
-        # loader.add_xpath('name2', '//h1/text()')
-        # return loader.load_item()
-
 
     def parse_small_size(self, response):
         Item = response.meta['item']
         selector = Selector(response)
-        Item['name2'] = selector.xpath('//h1/text()').extract()[0]
-        # self.log(Item)
+        Item['url2'] = response.url
+        big_name = Item['name'].split(' ')[1]
+        small_name = selector.xpath('//h1/text()').extract()[0].split(' ')[1]
+        small_sizes = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
+        small_sizes.remove(small_sizes[0])
+        for size in small_sizes:
+            if int(size) > 46:
+                Item['sizes'].append(size)
+        Item['sizes'].sort()
+        Item['name'] = '%s %s' % (big_name, small_name)
         yield Item
