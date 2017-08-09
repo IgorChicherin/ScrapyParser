@@ -3,7 +3,7 @@ import re
 from scrapy.spiders import CrawlSpider, Rule
 from scrapy.linkextractors import LinkExtractor
 from scrapy.selector import Selector
-from scrapy.http import Request, Response
+from scrapy.http import Request
 
 from ScrapyParser.items import SpidersItem
 
