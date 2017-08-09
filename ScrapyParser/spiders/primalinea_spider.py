@@ -42,8 +42,8 @@ class PrimalineaSpider(CrawlSpider):
         loader = PrimalineaItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         head = selector.xpath('//h1/text()').extract()[0].split(' ')
-        loader.add_value('name', head[0])
-        loader.add_value('_type', head[1])
+        loader.add_value('name', head[1])
+        loader.add_value('_type', head[0])
         loader.add_xpath('price', '//*[@id="catalog-item-description"]/p[1]/text()')
         sizes_list = selector.xpath('//*[@id="catalog-item-description"]/div[3]/text()').extract()[1]
         loader.add_value('sizes', _prettify_sizes(sizes_list))

@@ -37,6 +37,8 @@ class NovitaItemLoader(ItemLoader):
     price_out = Compose(lambda x: x[0].strip().replace(',', '').split('.'), TakeFirst())
     sizes_out = Identity()
     site_out = TakeFirst()
+    _type_out = TakeFirst()
+    is_new_out =TakeFirst()
 
 
 class PrimalineaItemLoader(ItemLoader):
@@ -55,3 +57,5 @@ class AvigalItemLoader(ItemLoader):
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Compose()
     site_out = TakeFirst()
+    is_new_out = TakeFirst()
+    _type_out = TakeFirst()

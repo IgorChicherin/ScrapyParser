@@ -52,4 +52,7 @@ class AvigalSpider(CrawlSpider):
         loader.add_xpath('price', '//*[@id="update_price"]/text()')
         loader.add_value('sizes', _get_sizes_list(response.body))
         loader.add_value('site', 'avigal')
+        loader.add_xpath('_type', '//*[@id="content"]//h1/text()')
+        loader.add_value('is_new', True if selector.xpath('//*[@id="content"]'
+                                                           '//div[@class="sticker-novelty"]').extract() else False)
         return loader.load_item()

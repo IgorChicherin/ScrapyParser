@@ -74,6 +74,8 @@ class NovitaSpider(CrawlSpider):
         loader = NovitaItemLoader(SpidersItem(), selector)
         loader.add_value('url', response.url)
         loader.add_xpath('name', '//h1/text()')
+        loader.add_value('_type',
+                         selector.xpath('//h1/text()').extract()[0].strip().replace(' ', '').split('-')[0].capitalize())
         loader.add_xpath('price', '//div[@class="price-value"]/div[@class="value"]/text()')
         color_list = _prettify_color(selector.xpath('//tr/td[@class="col-color"]/text()').extract())
         availiability_list = _get_aviliablity_list(selector.xpath('//html').extract()[0])
@@ -82,4 +84,5 @@ class NovitaSpider(CrawlSpider):
                                                                                 '/text()')).extract(),
                                                      sizes_accepted=availiability_list))
         loader.add_value('site', 'novita')
+        loader.add_value('is_new', False)
         return loader.load_item()
