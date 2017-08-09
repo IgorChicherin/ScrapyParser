@@ -45,6 +45,8 @@ class PrimalineaItemLoader(ItemLoader):
     price_out = Compose(lambda x: re.search(r'(\d+)', x[0].strip().replace(' ', '')).group(0), Identity())
     sizes_out = Identity()
     site_out = TakeFirst()
+    is_new_out = TakeFirst()
+    _type_out = TakeFirst()
 
 
 class AvigalItemLoader(ItemLoader):
