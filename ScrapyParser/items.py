@@ -14,13 +14,12 @@ import re
 
 class SpidersItem(scrapy.Item):
     url = scrapy.Field()
-    url2 = scrapy.Field()
     name = scrapy.Field()
     price = scrapy.Field()
     sizes = scrapy.Field()
     site = scrapy.Field()
     _type = scrapy.Field()
-
+    is_new = scrapy.Field()
 
 class BigmodaItemLoader(ItemLoader):
     site_out = TakeFirst()

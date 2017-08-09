@@ -15,8 +15,7 @@ class WisellSpider(CrawlSpider):
     allowed_domains = ['wisell.ru']
 
     rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="catalog-lements-id"]'],
-                                allow='https://wisell.ru/catalog/([A-Za-z0-9-_]+)/([A-Za-z0-9-]+)'
-                                 ),
+                                allow='https://wisell.ru/catalog/([A-Za-z0-9-_]+)/([A-Za-z0-9-]+)'),
                   callback='parse_item'),
              Rule(LinkExtractor(restrict_xpaths=['//*[@id="main-catalog"]/footer[1]/div/ul/li[6]']), follow=True)]
 
@@ -35,6 +34,7 @@ class WisellSpider(CrawlSpider):
             sizes_list = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
             sizes_list.remove(sizes_list[0])
             Item['sizes'] = sizes_list
+            Item['is_new'] = True if selector.xpath('//*[@id="item1"]/div/span[2]/span/span').extract() else False
             Item['site'] = 'wisell'
             small_size_link = 'https://wisell.ru%s' % (small_url[0])
             request = Request(small_size_link, callback=self.parse_small_size)
@@ -54,7 +54,6 @@ class WisellSpider(CrawlSpider):
     def parse_small_size(self, response):
         Item = response.meta['item']
         selector = Selector(response)
-        Item['url2'] = response.url
         big_name = Item['name'].split(' ')[1]
         small_name = selector.xpath('//h1/text()').extract()[0].split(' ')[1]
         small_sizes = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
