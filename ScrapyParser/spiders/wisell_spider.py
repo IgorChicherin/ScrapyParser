@@ -13,8 +13,7 @@ class WisellSpider(CrawlSpider):
     start_urls = ['https://wisell.ru/catalog/platya/']
     allowed_domains = ['wisell.ru']
 
-    rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="catalog-lements-id"]//li'
-                                                 '//div[@class="item_cont price_composite_content"]'],
+    rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="catalog-lements-id"]//li'],
                                 allow='/catalog/([A-Za-z0-9-_]+)/([A-Za-z0-9-]+)'),
                   callback='parse_item'),
              Rule(LinkExtractor(restrict_xpaths=['//*[@id="main-catalog"]/footer[1]/div/ul/li[6]']), follow=True)]
