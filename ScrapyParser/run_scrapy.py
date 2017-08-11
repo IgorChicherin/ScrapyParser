@@ -1,4 +1,5 @@
 import os
+import json
 
 from twisted.internet import reactor
 from scrapy.crawler import CrawlerRunner
@@ -42,7 +43,7 @@ def spiders_reactor():
 
 def create_woo_conn():
     '''
-    Create connection with WooCommerce REST API
+    Create connection with WooCommerce REST API and remove log files
     :return: WooCommerce API connection
     '''
     files = ['добавить удалить размеры.txt', 'добавить удалить карточки.txt', 'errors.txt']
@@ -65,5 +66,53 @@ def create_woo_conn():
     )
     return wcapi
 
+
+def _check_dress(items_list, item, _type, site):
+    if site == 'Новита' and item['_type'] == _type:
+        for key in item['sizes'][0]:
+            items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
+                               item['_type'], item['is_new']])
+    elif site != 'Новита' and item['_type'] == _type:
+        items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'], item['is_new']])
+
+    return items_list
+
+
+def _check_blouse(items_list, item, _type, site):
+    if site == 'Новита' and item['_type'] == _type:
+        for key in item['sizes'][0]:
+            items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
+                               item['_type'], item['is_new']])
+    elif site != 'Новита' and item['_type'] == _type:
+        items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'], item['is_new']])
+    return items_list
+
+
+def _create_items_list():
+    with open('result.json', 'r') as file:
+        result = list()
+        for item in file:
+            result.append(json.loads(item))
+    novita_dress, novita_blouse = list(), list()
+    avigal_dress, avigal_blouse = list(), list()
+    wisell_dress, wisell_blouse = list(), list()
+    primalinea_dress, primalinea_blouse = list(), list()
+    bigmoda_dress, bigmoda_blouse = list(), list()
+    for item in result:
+        if item['site'] == 'novita':
+            _check_dress(items_list=novita_dress, item=item, _type='Платье', site='Новита')
+            _check_blouse(items_list=novita_blouse, item=item, _type='Блузка', site='Новита')
+        elif item['site'] == 'avigal':
+            _check_dress(items_list=avigal_dress, item=item, _type='Платье', site='Авигаль')
+            _check_blouse(items_list=avigal_dress, item=item, _type='Блузка', site='Авигаль')
+            print(item['_type'])
+
+    print(novita_dress)
+    print(novita_blouse)
+    print(avigal_dress)
+    print(avigal_blouse)
+
+
 if __name__ == '__main__':
-    spiders_reactor()
+    # spiders_reactor()
+    _create_items_list()
