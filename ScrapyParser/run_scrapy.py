@@ -67,24 +67,39 @@ def create_woo_conn():
     return wcapi
 
 
-def _check_dress(items_list, item, _type, site):
+def _check_dress(items_list, item, _type, site=None):
     if site == 'Новита' and item['_type'] == _type:
         for key in item['sizes'][0]:
             items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
                                item['_type'], item['is_new']])
     elif site != 'Новита' and item['_type'] == _type:
-        items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'], item['is_new']])
+        if site == None:
+            # print(item['name'], item['price'])
+            try:
+                items_list.append([item['name'], item['sizes'], item['price'], item['_type'], item['is_new']])
+            except KeyError:
+                print(item)
+        else:
+            items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'],
+                               item['is_new']])
 
     return items_list
 
 
-def _check_blouse(items_list, item, _type, site):
+def _check_blouse(items_list, item, _type, site=None):
     if site == 'Новита' and item['_type'] == _type:
         for key in item['sizes'][0]:
             items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
                                item['_type'], item['is_new']])
     elif site != 'Новита' and item['_type'] == _type:
-        items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'], item['is_new']])
+        if site == None:
+            try:
+                items_list.append([item['name'], item['sizes'], item['price'], item['_type'], item['is_new']])
+            except KeyError:
+                print(item)
+        else:
+            items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'],
+                               item['is_new']])
     return items_list
 
 
@@ -115,17 +130,17 @@ def _create_items_list():
             _check_blouse(items_list=primalinea_blouse, item=item, _type='Блуза', site='Прима')
             _check_blouse(items_list=primalinea_blouse, item=item, _type='Туника', site='Прима')
         elif item['site'] == 'bigmoda':
-            _check_dress(items_list=bigmoda_dress, item=item, _type='Платье', site='Прима')
-            _check_dress(items_list=bigmoda_dress, item=item, _type='Костюм', site='Прима')
-            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блуза', site='Прима')
-            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блузка', site='Прима')
+            _check_dress(items_list=bigmoda_dress, item=item, _type='Платье')
+            _check_dress(items_list=bigmoda_dress, item=item, _type='Костюм')
+            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блуза')
+            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блузка')
 
-    print(bigmoda_dress)
-    print(bigmoda_blouse)
+    # print(bigmoda_dress)
+    # print(bigmoda_blouse)
 
 
 if __name__ == '__main__':
-    if os.path.exists('result.json'):
-        os.remove('result.json')
-    spiders_reactor()
+    # if os.path.exists('result.json'):
+    #     os.remove('result.json')
+    # spiders_reactor()
     _create_items_list()
