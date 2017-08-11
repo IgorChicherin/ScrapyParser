@@ -104,15 +104,28 @@ def _create_items_list():
             _check_blouse(items_list=novita_blouse, item=item, _type='Блузка', site='Новита')
         elif item['site'] == 'avigal':
             _check_dress(items_list=avigal_dress, item=item, _type='Платье', site='Авигаль')
-            _check_blouse(items_list=avigal_dress, item=item, _type='Блузка', site='Авигаль')
-            print(item['_type'])
+            _check_blouse(items_list=avigal_blouse, item=item, _type='Блузка', site='Авигаль')
+            _check_blouse(items_list=avigal_blouse, item=item, _type='Туника', site='Авигаль')
+        elif item['site'] == 'wisell':
+            _check_dress(items_list=wisell_dress, item=item, _type='Платье', site='Визель')
+            _check_blouse(items_list=wisell_blouse, item=item, _type='Блуза', site='Визель')
+            _check_blouse(items_list=wisell_blouse, item=item, _type='Туника', site='Визель')
+        elif item['site'] == 'primalinea':
+            _check_dress(items_list=primalinea_dress, item=item, _type='Платье', site='Прима')
+            _check_blouse(items_list=primalinea_blouse, item=item, _type='Блуза', site='Прима')
+            _check_blouse(items_list=primalinea_blouse, item=item, _type='Туника', site='Прима')
+        elif item['site'] == 'bigmoda':
+            _check_dress(items_list=bigmoda_dress, item=item, _type='Платье', site='Прима')
+            _check_dress(items_list=bigmoda_dress, item=item, _type='Костюм', site='Прима')
+            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блуза', site='Прима')
+            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блузка', site='Прима')
 
-    print(novita_dress)
-    print(novita_blouse)
-    print(avigal_dress)
-    print(avigal_blouse)
+    print(bigmoda_dress)
+    print(bigmoda_blouse)
 
 
 if __name__ == '__main__':
-    # spiders_reactor()
+    if os.path.exists('result.json'):
+        os.remove('result.json')
+    spiders_reactor()
     _create_items_list()
