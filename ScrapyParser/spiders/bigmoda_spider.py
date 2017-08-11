@@ -31,4 +31,7 @@ class BigmodaSpider(CrawlSpider):
         loader.add_xpath('price', '//*/div[3]/p[1]/span/text()')
         loader.add_xpath('sizes', '//*[@id="ivpa-content"]/div[2]/span/text()')
         loader.add_value('site', 'bigmoda')
+        item_type = selector.xpath('//h1/text()').extract()[0].split(' ')[0]
+        loader.add_value('_type', item_type)
+        loader.add_value('is_new', False)
         return loader.load_item()
