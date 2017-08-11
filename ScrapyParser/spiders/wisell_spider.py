@@ -10,7 +10,7 @@ import requests
 class WisellSpider(CrawlSpider):
     name = 'wisell'
 
-    start_urls = ['https://wisell.ru/catalog/platya/']
+    start_urls = ['https://wisell.ru/catalog/platya/', 'https://wisell.ru/catalog/tuniki_bluzy/']
     allowed_domains = ['wisell.ru']
 
     rules = [Rule(LinkExtractor(restrict_xpaths=['//*[@id="catalog-lements-id"]//li'],
