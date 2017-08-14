@@ -95,6 +95,10 @@ def _create_items_list():
         result = list()
         for item in file:
             result.append(json.loads(item))
+    with open('exc.json', 'r') as file:
+        bigmoda_exc = list()
+        for item in file:
+            bigmoda_exc.append(json.loads(item))
     novita_dress, novita_blouse = list(), list()
     avigal_dress, avigal_blouse = list(), list()
     wisell_dress, wisell_blouse = list(), list()
@@ -106,8 +110,8 @@ def _create_items_list():
             _check_dress(novita_dress, item, _type='Платье', site='Новита', goods=goods_data)
             _check_dress(novita_blouse, item, _type='Блузка', site='Новита', goods=goods_data)
         elif item['site'] == 'avigal':
-            _check_dress(avigal_dress,item, _type='Платье', site='Авигаль', goods=goods_data)
-            _check_dress(avigal_blouse,item, _type='Блузка', site='Авигаль', goods=goods_data)
+            _check_dress(avigal_dress, item, _type='Платье', site='Авигаль', goods=goods_data)
+            _check_dress(avigal_blouse, item, _type='Блузка', site='Авигаль', goods=goods_data)
             _check_dress(avigal_blouse, item, _type='Туника', site='Авигаль', goods=goods_data)
         elif item['site'] == 'wisell':
             _check_dress(wisell_dress, item, _type='Платье', site='Визель', goods=goods_data)
@@ -127,13 +131,24 @@ def _create_items_list():
             'avigal': {'dress': avigal_dress, 'blouse': avigal_blouse},
             'wisell': {'dress': wisell_dress, 'blouse': wisell_blouse},
             'prima': {'dress': primalinea_dress, 'blouse': primalinea_blouse},
-            'bigmoda': {'dress': bigmoda_dress,  'blouse': bigmoda_blouse},
-            'goods_data': goods_data}
+            'bigmoda': {'dress': bigmoda_dress, 'blouse': bigmoda_blouse},
+            'goods_data': goods_data, 'bigmoda_exc': bigmoda_exc}
 
 
 if __name__ == '__main__':
-    # if os.path.exists('result.json'):
-    #     os.remove('result.json')
-    # spiders_reactor()
+    files = ['result.json', 'exc.json']
+    for file in files:
+        if os.path.exists(file):
+            os.remove(file)
+    spiders_reactor()
     result = _create_items_list()
-
+    dress_pages = [result['novita']['dress'], result['avigal']['dress'], result['wisell']['dress'],
+                   result['prima']['dress']]
+    blouse_pages = [result['novita']['blouse'], result['avigal']['blouse'], result['wisell']['blouse'],
+                   result['prima']['blouse']]
+    bigmoda_pages = [result['bigmoda']['dress'], result['bigmoda']['blouse'], result['bigmoda_exc']]
+    for site in dress_pages:
+        compare_dress(site, bigmoda_pages[0], bigmoda_pages[1], create_woo_conn())
+    for site in blouse_pages:
+        compare_dress(site, bigmoda_pages[1], bigmoda_pages[2], create_woo_conn())
+    del_item(result['goods_data'], bigmoda_pages, create_woo_conn())
