@@ -67,39 +67,26 @@ def create_woo_conn():
     return wcapi
 
 
-def _check_dress(items_list, item, _type, site=None):
+def _check_dress(items_list, item, _type, goods, site=None):
     if site == 'Новита' and item['_type'] == _type:
         for key in item['sizes'][0]:
             items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
                                item['_type'], item['is_new']])
+            goods.append('%s %s %s' % (site, item['name'], key))
     elif site != 'Новита' and item['_type'] == _type:
         if site == None:
             # print(item['name'], item['price'])
             try:
                 items_list.append([item['name'], item['sizes'], item['price'], item['_type'], item['is_new']])
+                goods.append('%s' % (item['name']))
             except KeyError:
-                print(item)
+                # print(item)
+                pass
         else:
             items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'],
                                item['is_new']])
+            goods.append('%s %s' % (site, item['name']))
 
-    return items_list
-
-
-def _check_blouse(items_list, item, _type, site=None):
-    if site == 'Новита' and item['_type'] == _type:
-        for key in item['sizes'][0]:
-            items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
-                               item['_type'], item['is_new']])
-    elif site != 'Новита' and item['_type'] == _type:
-        if site == None:
-            try:
-                items_list.append([item['name'], item['sizes'], item['price'], item['_type'], item['is_new']])
-            except KeyError:
-                print(item)
-        else:
-            items_list.append(['%s %s' % (site, item['name']), item['sizes'], item['price'], item['_type'],
-                               item['is_new']])
     return items_list
 
 
@@ -113,34 +100,40 @@ def _create_items_list():
     wisell_dress, wisell_blouse = list(), list()
     primalinea_dress, primalinea_blouse = list(), list()
     bigmoda_dress, bigmoda_blouse = list(), list()
+    goods_data = list()
     for item in result:
         if item['site'] == 'novita':
-            _check_dress(items_list=novita_dress, item=item, _type='Платье', site='Новита')
-            _check_blouse(items_list=novita_blouse, item=item, _type='Блузка', site='Новита')
+            _check_dress(novita_dress, item, _type='Платье', site='Новита', goods=goods_data)
+            _check_dress(novita_blouse, item, _type='Блузка', site='Новита', goods=goods_data)
         elif item['site'] == 'avigal':
-            _check_dress(items_list=avigal_dress, item=item, _type='Платье', site='Авигаль')
-            _check_blouse(items_list=avigal_blouse, item=item, _type='Блузка', site='Авигаль')
-            _check_blouse(items_list=avigal_blouse, item=item, _type='Туника', site='Авигаль')
+            _check_dress(avigal_dress,item, _type='Платье', site='Авигаль', goods=goods_data)
+            _check_dress(avigal_blouse,item, _type='Блузка', site='Авигаль', goods=goods_data)
+            _check_dress(avigal_blouse, item, _type='Туника', site='Авигаль', goods=goods_data)
         elif item['site'] == 'wisell':
-            _check_dress(items_list=wisell_dress, item=item, _type='Платье', site='Визель')
-            _check_blouse(items_list=wisell_blouse, item=item, _type='Блуза', site='Визель')
-            _check_blouse(items_list=wisell_blouse, item=item, _type='Туника', site='Визель')
+            _check_dress(wisell_dress, item, _type='Платье', site='Визель', goods=goods_data)
+            _check_dress(wisell_blouse, item, _type='Блуза', site='Визель', goods=goods_data)
+            _check_dress(wisell_blouse, item, _type='Туника', site='Визель', goods=goods_data)
         elif item['site'] == 'primalinea':
-            _check_dress(items_list=primalinea_dress, item=item, _type='Платье', site='Прима')
-            _check_blouse(items_list=primalinea_blouse, item=item, _type='Блуза', site='Прима')
-            _check_blouse(items_list=primalinea_blouse, item=item, _type='Туника', site='Прима')
+            _check_dress(primalinea_dress, item, _type='Платье', site='Прима', goods=goods_data)
+            _check_dress(primalinea_blouse, item, _type='Блуза', site='Прима', goods=goods_data)
+            _check_dress(primalinea_blouse, item, _type='Туника', site='Прима', goods=goods_data)
         elif item['site'] == 'bigmoda':
-            _check_dress(items_list=bigmoda_dress, item=item, _type='Платье')
-            _check_dress(items_list=bigmoda_dress, item=item, _type='Костюм')
-            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блуза')
-            _check_blouse(items_list=bigmoda_blouse, item=item, _type='Блузка')
+            _check_dress(bigmoda_dress, item, _type='Платье', goods=goods_data)
+            _check_dress(bigmoda_dress, item, _type='Костюм', goods=goods_data)
+            _check_dress(bigmoda_blouse, item, _type='Блуза', goods=goods_data)
+            _check_dress(bigmoda_blouse, item, _type='Блузка', goods=goods_data)
 
-    # print(bigmoda_dress)
-    # print(bigmoda_blouse)
+    return {'novita': {'dress': novita_dress, 'blouse': novita_blouse},
+            'avigal': {'dress': avigal_dress, 'blouse': avigal_blouse},
+            'wisell': {'dress': wisell_dress, 'blouse': wisell_blouse},
+            'prima': {'dress': primalinea_dress, 'blouse': primalinea_blouse},
+            'bigmoda': {'dress': bigmoda_dress,  'blouse': bigmoda_blouse},
+            'goods_data': goods_data}
 
 
 if __name__ == '__main__':
     # if os.path.exists('result.json'):
     #     os.remove('result.json')
     # spiders_reactor()
-    _create_items_list()
+    result = _create_items_list()
+
