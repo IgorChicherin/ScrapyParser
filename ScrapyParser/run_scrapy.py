@@ -136,11 +136,11 @@ def _create_items_list():
 
 
 if __name__ == '__main__':
-    files = ['result.json', 'exc.json']
-    for file in files:
-        if os.path.exists(file):
-            os.remove(file)
-    spiders_reactor()
+    # files = ['result.json', 'exc.json']
+    # for file in files:
+    #     if os.path.exists(file):
+    #         os.remove(file)
+    # spiders_reactor()
     result = _create_items_list()
     dress_pages = [result['novita']['dress'], result['avigal']['dress'], result['wisell']['dress'],
                    result['prima']['dress']]
