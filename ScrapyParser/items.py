@@ -28,6 +28,8 @@ class BigmodaItemLoader(ItemLoader):
     price_in = TakeFirst()
     price_out = Compose(lambda x: x[0].strip().replace(',', '').split('.'), price_in)
     sizes_out = MapCompose(lambda x: x.strip())
+    _type_out = TakeFirst()
+    is_new_out = TakeFirst()
 
 
 class NovitaItemLoader(ItemLoader):
