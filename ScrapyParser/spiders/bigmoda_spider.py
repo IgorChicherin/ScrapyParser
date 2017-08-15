@@ -30,6 +30,12 @@ class BigmodaSpider(CrawlSpider):
     def parse_item(self, response):
         selector = Selector(response)
         loader = BigmodaItemLoader(SpidersItem(), selector)
+        product_id = re.search(r'(\d+)', selector.xpath('//*[@id="main"]/div/@id').extract()[0]).group(0)
+        sizes_id = re.findall(r'(?<="variation_id":)(\d+)',
+                              selector.xpath('//*[@id="ivpa-content"]/@data-variations').extract()[0])
+        sizes_key = re.findall(r'(?<="attribute_pa_size":)"(\d+)"',
+                               selector.xpath('//*[@id="ivpa-content"]/@data-variations').extract()[0])
+        product_size_id = dict(zip(sizes_key, sizes_id))
         if 'rasprodazha-bolshie-razmery' in response.url:
             item = dict()
             item['url'] = response.url
@@ -41,6 +47,8 @@ class BigmodaSpider(CrawlSpider):
             item['site'] = 'bigmoda'
             item['item_type'] = selector.xpath('//h1/text()').extract()[0].split(' ')[0]
             item['is_new'] = False
+            item['product_id'] = product_id
+            item['product_size_id'] = product_size_id
             with open('exc.json', 'a') as exc_file:
                 line = json.dumps(dict(item)) + "\n"
                 exc_file.write(line)
@@ -50,7 +58,8 @@ class BigmodaSpider(CrawlSpider):
             loader.add_xpath('price', '//*/div[3]/p[1]/span/text()')
             loader.add_xpath('sizes', '//*[@id="ivpa-content"]/div[2]/span/text()')
             loader.add_value('site', 'bigmoda')
-            product_id = re.search(r'(\d+)', selector.xpath('//*[@id="main"]/div/@id').extract()[0])
+            loader.add_value('product_id', product_id)
+            loader.add_value('product_size_id', product_size_id)
             item_type = selector.xpath('//h1/text()').extract()[0].split(' ')[0]
             loader.add_value('_type', item_type)
             loader.add_value('is_new', False)

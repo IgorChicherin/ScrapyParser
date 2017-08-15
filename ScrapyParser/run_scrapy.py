@@ -75,9 +75,9 @@ def _check_dress(items_list, item, _type, goods, site=None):
             goods.append('%s %s %s' % (site, item['name'], key))
     elif site != 'Новита' and item['_type'] == _type:
         if site == None:
-            # print(item['name'], item['price'])
             try:
-                items_list.append([item['name'], item['sizes'], item['price'], item['_type'], item['is_new']])
+                items_list.append(
+                    [item['name'], item['sizes'], item['price'], item['product_id'], item['product_size_id']])
                 goods.append('%s' % (item['name']))
             except KeyError:
                 # print(item)
@@ -136,16 +136,16 @@ def _create_items_list():
 
 
 if __name__ == '__main__':
-    # files = ['result.json', 'exc.json']
-    # for file in files:
-    #     if os.path.exists(file):
-    #         os.remove(file)
-    # spiders_reactor()
+    files = ['result.json', 'exc.json']
+    for file in files:
+        if os.path.exists(file):
+            os.remove(file)
+    spiders_reactor()
     result = _create_items_list()
     dress_pages = [result['novita']['dress'], result['avigal']['dress'], result['wisell']['dress'],
                    result['prima']['dress']]
     blouse_pages = [result['novita']['blouse'], result['avigal']['blouse'], result['wisell']['blouse'],
-                   result['prima']['blouse']]
+                    result['prima']['blouse']]
     bigmoda_pages = [result['bigmoda']['dress'], result['bigmoda']['blouse'], result['bigmoda_exc']]
     for site in dress_pages:
         compare_dress(site, bigmoda_pages[0], bigmoda_pages[1], create_woo_conn())

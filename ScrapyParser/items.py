@@ -20,6 +20,8 @@ class SpidersItem(scrapy.Item):
     site = scrapy.Field()
     _type = scrapy.Field()
     is_new = scrapy.Field()
+    product_id = scrapy.Field()
+    product_size_id = scrapy.Field()
 
 class BigmodaItemLoader(ItemLoader):
     site_out = TakeFirst()
@@ -30,6 +32,8 @@ class BigmodaItemLoader(ItemLoader):
     sizes_out = MapCompose(lambda x: x.strip())
     _type_out = TakeFirst()
     is_new_out = TakeFirst()
+    product_id_out = TakeFirst()
+    product_size_id_out = TakeFirst()
 
 
 class NovitaItemLoader(ItemLoader):
