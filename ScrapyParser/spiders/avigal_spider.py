@@ -9,6 +9,11 @@ from bs4 import BeautifulSoup
 
 
 def _get_sizes_list(body):
+    '''
+    Return formatted list of sizes item
+    :param body: str (request body)
+    :return: list
+    '''
     soup = BeautifulSoup(body, 'lxml')
     sizes_list = soup.find_all('label', {'class': 'optid-13'})
     sizes_list = [item.text.strip() for item in sizes_list if r':n\a' not in item['title']]

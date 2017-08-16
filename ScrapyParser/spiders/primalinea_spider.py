@@ -7,6 +7,11 @@ from ScrapyParser.items import PrimalineaItemLoader, SpidersItem
 
 
 def _prettify_sizes(sizes):
+    '''
+    Return formatted list of sizes item
+    :param sizes: list
+    :return: list
+    '''
     sizes = str(sizes).split(',')
     return list(size.strip() for size in sizes)
 

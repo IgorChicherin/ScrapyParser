@@ -10,10 +10,6 @@ import json
 
 
 class JsonWriterPipeline(object):
-    # files = ['result.json']
-    # for file in files:
-    #     if os.path.exists(file):
-    #         os.remove(file)
 
     def open_spider(self, spider):
         self.file = open('result.json', 'a')

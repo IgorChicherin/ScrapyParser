@@ -46,11 +46,6 @@ def create_woo_conn():
     Create connection with WooCommerce REST API and remove log files
     :return: WooCommerce API connection
     '''
-    files = ['добавить удалить размеры.txt', 'добавить удалить карточки.txt', 'errors.txt']
-    for file in files:
-        if os.path.exists(file):
-            os.remove(file)
-
     with open('keys.txt', 'r') as file:
         keys = [line.strip() for line in file]
 
@@ -58,7 +53,7 @@ def create_woo_conn():
     consumer_secret = keys[1]
 
     wcapi = API(
-        url='http://big-moda.com',
+        url='http://localhost',
         consumer_key=consumer_key,
         consumer_secret=consumer_secret,
         wp_api=True,
@@ -68,6 +63,15 @@ def create_woo_conn():
 
 
 def _check_dress(items_list, item, _type, goods, site=None):
+    '''
+    Create dict of item with categories dress and blouse
+    :param items_list: list
+    :param item: dict
+    :param _type: str
+    :param goods: list
+    :param site: str or None
+    :return: dict
+    '''
     if site == 'Новита' and item['_type'] == _type:
         for key in item['sizes'][0]:
             items_list.append(['%s %s %s' % (site, item['name'], key), item['sizes'][0][key], item['price'],
@@ -91,6 +95,10 @@ def _check_dress(items_list, item, _type, goods, site=None):
 
 
 def _create_items_list():
+    '''
+    Retutns dict of items of suppliers
+    :return: dict
+    '''
     with open('result.json', 'r') as file:
         result = list()
         for item in file:
@@ -139,11 +147,11 @@ def _create_items_list():
 
 
 if __name__ == '__main__':
-    # files = ['result.json', 'exc.json']
-    # for file in files:
-    #     if os.path.exists(file):
-    #         os.remove(file)
-    # spiders_reactor()
+    files = ['result.json', 'exc.json', 'добавить удалить размеры.txt', 'добавить удалить карточки.txt', 'errors.txt']
+    for file in files:
+        if os.path.exists(file):
+            os.remove(file)
+    spiders_reactor()
     result = _create_items_list()
     dress_pages = [result['novita']['dress'], result['avigal']['dress'], result['wisell']['dress'],
                    result['prima']['dress']]

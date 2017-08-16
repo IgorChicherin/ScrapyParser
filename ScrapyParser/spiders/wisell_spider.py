@@ -29,7 +29,6 @@ class WisellSpider(CrawlSpider):
         is_big = True if selector.xpath('//*[@id="size-interval-tabs"]'
                                         '/li/a/@href').extract()[0] == '#size_rang-2' else False
         loader.add_value('_type', selector.xpath('//h1/text()').extract()[0].split(' ')[0])
-        small_size_link = 'https://wisell.ru%s' % (small_url[0])
         if small_url[0] and len(small_url) > 1:
             big_name = selector.xpath('//h1/text()').extract()[0].split(' ')[1]
             sizes_list = selector.xpath('//*[@id="size_rang-1"]/div/ul/li/label//span/text()').extract()
