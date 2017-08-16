@@ -105,6 +105,7 @@ def _create_items_list():
     primalinea_dress, primalinea_blouse = list(), list()
     bigmoda_dress, bigmoda_blouse = list(), list()
     goods_data = list()
+    exc = list()
     for item in result:
         if item['site'] == 'novita':
             _check_dress(novita_dress, item, _type='Платье', site='Новита', goods=goods_data)
@@ -126,21 +127,23 @@ def _create_items_list():
             _check_dress(bigmoda_dress, item, _type='Костюм', goods=goods_data)
             _check_dress(bigmoda_blouse, item, _type='Блуза', goods=goods_data)
             _check_dress(bigmoda_blouse, item, _type='Блузка', goods=goods_data)
+    for item in bigmoda_exc:
+        exc.append([item['name'], item['sizes'], item['price'], item['product_id'], item['product_size_id']])
 
     return {'novita': {'dress': novita_dress, 'blouse': novita_blouse},
             'avigal': {'dress': avigal_dress, 'blouse': avigal_blouse},
             'wisell': {'dress': wisell_dress, 'blouse': wisell_blouse},
             'prima': {'dress': primalinea_dress, 'blouse': primalinea_blouse},
             'bigmoda': {'dress': bigmoda_dress, 'blouse': bigmoda_blouse},
-            'goods_data': goods_data, 'bigmoda_exc': bigmoda_exc}
+            'goods_data': goods_data, 'bigmoda_exc': exc}
 
 
 if __name__ == '__main__':
-    files = ['result.json', 'exc.json']
-    for file in files:
-        if os.path.exists(file):
-            os.remove(file)
-    spiders_reactor()
+    # files = ['result.json', 'exc.json']
+    # for file in files:
+    #     if os.path.exists(file):
+    #         os.remove(file)
+    # spiders_reactor()
     result = _create_items_list()
     dress_pages = [result['novita']['dress'], result['avigal']['dress'], result['wisell']['dress'],
                    result['prima']['dress']]
