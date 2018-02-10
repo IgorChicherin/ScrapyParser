@@ -22,7 +22,6 @@ pycparser==2.18
 PyDispatcher==2.0.5
 PyInstaller==3.2.1
 pyOpenSSL==17.2.0
-pypiwin32==219
 queuelib==1.4.2
 requests==2.18.3
 Scrapy==1.4.0
